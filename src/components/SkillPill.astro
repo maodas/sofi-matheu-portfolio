@@ -1,0 +1,11 @@
+---
+interface Props {
+  text?: string;
+}
+
+const { text } = Astro.props;
+---
+
+<span class="inline-flex flex-none items-center justify-center px-4 py-1.5 rounded-full text-sm font-semibold tracking-wide bg-earth-bg text-earth-text border border-earth-text/5 cursor-default hover:bg-terracotta hover:text-white transition-colors duration-200">
+  {text ? text : <slot />}
+</span>

@@ -1,0 +1,144 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { globalData, useTranslations, type Language } from '../i18n/ui';
+import TimelineItem from './TimelineItem.astro';
+import Card from './Card.astro';
+import SkillPill from './SkillPill.astro';
+import ResearchListItem from './ResearchListItem.astro';
+
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const cvLink = lang === 'es' ? '/cv-es.pdf' : '/cv-en.pdf';
+const cvName = lang === 'es' ? 'Sofia_Matheu_CV_Espanol.pdf' : 'Sofia_Matheu_CV_English.pdf';
+---
+
+<Layout title={`${t.name} - Dossier`} lang={lang}>
+  <!-- 1. Hero Section -->
+  <section class="pt-32 pb-8 md:pt-40 md:pb-8 flex flex-col justify-center px-6 md:px-12 lg:px-24">
+    <div class="max-w-5xl animate-fade-in flex flex-col items-start pt-12 md:pt-0">
+      <h1 class="text-6xl sm:text-7xl md:text-9xl font-serif italic font-bold text-earth-text tracking-tight mb-8 leading-[1.1]">{t.name}</h1>
+      
+      <div class="w-24 h-[1px] bg-earth-text/20 mb-8"></div>
+      
+      <h2 class="text-sm sm:text-base md:text-lg font-sans font-bold text-primary tracking-[0.3em] uppercase mb-16">{t.title}</h2>
+      
+      <div class="flex flex-col sm:flex-row gap-6 w-full justify-start items-start">
+        <a 
+          href={`mailto:${globalData.email}`}
+          class="inline-flex justify-center items-center px-10 py-4 font-sans font-bold text-earth-text border-b-2 border-earth-text/20 hover:border-terracotta hover:text-terracotta transition-all duration-300"
+        >
+          {lang === 'es' ? 'Contactar' : 'Contact'}
+        </a>
+        <a 
+          href={cvLink}
+          download={cvName}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex justify-center items-center px-10 py-4 font-sans font-bold text-primary border-b-2 border-primary hover:border-terracotta hover:text-terracotta transition-all duration-300"
+        >
+          {t.elements.downloadCV}
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. About / Summary Pull Quote -->
+  <section class="max-w-4xl mx-auto px-12 md:px-20 pt-8 pb-24 flex justify-center mt-8">
+    <blockquote class="relative inline-block text-2xl md:text-4xl text-center font-serif italic text-earth-text/90 leading-[1.6] before:absolute before:content-['“'] before:-top-4 before:-left-6 before:text-6xl before:font-serif before:text-terracotta/20 after:content-['”'] after:relative after:top-3 after:left-1 after:text-6xl after:font-serif after:text-terracotta/20 after:leading-[0] after:inline">
+      {t.summary}
+    </blockquote>
+  </section>
+
+  <main class="w-full">
+    <!-- 3. Skills Matrix -->
+    <section class="py-24 px-6 border-b border-t border-earth-text/5 bg-white/40">
+      <div class="max-w-5xl mx-auto flex flex-wrap justify-center sm:justify-start gap-4">
+        {t.skills.map((skill) => (
+          <SkillPill text={skill} />
+        ))}
+      </div>
+    </section>
+
+    <div class="max-w-6xl mx-auto px-6 py-32 space-y-48">
+      
+      <!-- 4. Professional Experience -->
+      <section class="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-12 lg:gap-24 relative">
+        <header class="lg:sticky lg:top-32 h-max">
+          <h2 class="text-4xl md:text-5xl font-serif font-bold text-earth-text">
+            {lang === 'es' ? 'Experiencia' : 'Experience'}
+          </h2>
+          <div class="w-12 h-1 bg-terracotta mt-8 rounded-full"></div>
+        </header>
+        
+        <div class="flex flex-col gap-8">
+          {t.experience.map((job) => (
+            <article>
+              <TimelineItem title={job.title} subtitle={job.company} date={job.period}>
+                <p class="text-base text-earth-text/90 leading-relaxed mt-2 whitespace-pre-line">{job.description}</p>
+              </TimelineItem>
+            </article>
+          ))}
+        </div>
+      </section>
+      
+      <!-- 5. Research & Fieldwork -->
+      <section class="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-12 lg:gap-24 relative">
+        <header class="lg:sticky lg:top-32 h-max">
+          <h2 class="text-4xl md:text-5xl font-serif font-bold text-earth-text">
+            {lang === 'es' ? 'Investigación' : 'Research'}
+          </h2>
+          <div class="w-12 h-1 bg-terracotta mt-8 rounded-full"></div>
+        </header>
+        
+        <div class="flex flex-col border-t border-earth-text/10">
+          {t.research.map((item) => (
+            <article>
+              <ResearchListItem title={item.title} year={item.year} />
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <!-- 6. Education -->
+      <section class="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-12 lg:gap-24 relative">
+        <header class="lg:sticky lg:top-32 h-max">
+          <h2 class="text-4xl md:text-5xl font-serif font-bold text-earth-text">
+            {lang === 'es' ? 'Educación' : 'Education'}
+          </h2>
+          <div class="w-12 h-1 bg-terracotta mt-8 rounded-full"></div>
+        </header>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+          {t.education.map((edu) => (
+            <article class="h-full flex w-full">
+              <div class="w-full h-full">
+                <Card title={edu.degree} subtitle={edu.institution} />
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- 7. Footer -->
+  <footer class="bg-earth-bg/20 border-t border-earth-text/10 py-16 px-6 mt-24">
+    <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12 text-earth-text">
+      <div class="font-sans text-center md:text-left">
+        <p class="mb-4 text-xs font-bold tracking-widest text-earth-text/60 uppercase">{lang === 'es' ? 'Contacto' : 'Contact'}</p>
+        <a href={`mailto:${globalData.email}`} class="hover:text-primary transition-colors font-serif italic text-2xl md:text-3xl underline decoration-terracotta/40 underline-offset-8">{globalData.email}</a>
+      </div>
+      
+      <div class="flex items-center gap-6 font-mono text-xs tracking-widest bg-white/40 px-8 py-4 rounded-full shadow-sm">
+        <a href="/es/" data-lang="es" class={`hover:text-terracotta transition-colors ${lang === 'es' ? 'text-primary font-bold' : 'text-earth-text/60'}`}>ES</a>
+        <span class="text-earth-text/20">|</span>
+        <a href="/en/" data-lang="en" class={`hover:text-terracotta transition-colors ${lang === 'en' ? 'text-primary font-bold' : 'text-earth-text/60'}`}>EN</a>
+      </div>
+    </div>
+  </footer>
+</Layout>

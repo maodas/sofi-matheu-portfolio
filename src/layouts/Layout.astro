@@ -1,23 +1,51 @@
+---
+import '../styles/global.css';
+
+interface Props {
+	title: string;
+	lang: 'en' | 'es';
+}
+
+const { title, lang } = Astro.props;
+---
+
 <!doctype html>
-<html lang="en">
+<html lang={lang}>
 	<head>
 		<meta charset="UTF-8" />
+		<meta name="description" content="Professional Portfolio" />
 		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2" />
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+		<title>{title}</title>
+		<script>
+			// Save the language preference when navigating
+			document.addEventListener('DOMContentLoaded', () => {
+				const langLinks = document.querySelectorAll('[data-lang]');
+				langLinks.forEach(link => {
+					link.addEventListener('click', () => {
+						const selectedLang = link.getAttribute('data-lang');
+						if(selectedLang) {
+							localStorage.setItem('preferredLang', selectedLang);
+						}
+					});
+				});
+			});
+		</script>
 	</head>
-	<body>
+	<body class="bg-mesh-earth text-earth-text min-h-screen font-sans selection:bg-primary selection:text-white">
+		<nav class="sticky top-0 z-50 bg-[#FAFAFA]/95 backdrop-blur-sm border-b border-earth-text/10">
+			<div class="max-w-5xl mx-auto px-6 h-16 flex items-center justify-end">
+				<div class="flex items-center gap-4 text-sm font-medium">
+					<a href="/es/" data-lang="es" class={`hover:text-terracotta ${lang === 'es' ? 'text-primary' : 'text-earth-text/60'}`}>ES</a>
+					<span class="text-earth-text/20">|</span>
+					<a href="/en/" data-lang="en" class={`hover:text-terracotta ${lang === 'en' ? 'text-primary' : 'text-earth-text/60'}`}>EN</a>
+				</div>
+			</div>
+		</nav>
 		<slot />
 	</body>
 </html>
-
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>
